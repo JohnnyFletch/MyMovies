@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="nullDp">0dp</dimen>
+    <dimen name="sixteenDp">16dp</dimen>
+    <dimen name="forty">40dp</dimen>
+    <dimen name="eight">8dp</dimen>
+    <dimen name="one">1dp</dimen>
+    <dimen name="four">4dp</dimen>
+    <dimen name="sixty">60dp</dimen>
+    <dimen name="fortyTwo">42dp</dimen>
+</resources>
