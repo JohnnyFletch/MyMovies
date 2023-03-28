@@ -96,8 +96,8 @@ public class DetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("id")) {
             id = intent.getIntExtra("id",-1);
-        } else if (intent != null && intent.hasExtra("idF")){
-            id = intent.getIntExtra("idF", -1);
+        } else {
+            finish();
         }
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
         movie = viewModel.getMovieById(id);
