@@ -74,9 +74,9 @@ public class FavouriteActivity extends AppCompatActivity {
         adapter.setOnPosterClickListener(new MovieAdapter.OnPosterClickListener() {
             @Override
             public void onPosterClick(int position) {
-                FavouriteMovie favouriteMovie = (FavouriteMovie) adapter.getMovies().get(position);
+                FavouriteMovie movie = (FavouriteMovie) adapter.getMovies().get(position);
                 Intent intent = new Intent(FavouriteActivity.this, DetailActivity.class);
-                intent.putExtra("idF", favouriteMovie.getId());
+                intent.putExtra("idF", movie.getId());
                 startActivity(intent);
             }
         });

@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mymovies.R;
+import com.example.mymovies.data.FavouriteMovie;
 import com.example.mymovies.data.Movie;
 import com.squareup.picasso.Picasso;
 
@@ -24,6 +25,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     public MovieAdapter() {
         movies = new ArrayList<>();
     }
+
 
     public interface OnPosterClickListener {
         void onPosterClick(int position);

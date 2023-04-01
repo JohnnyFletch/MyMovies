@@ -101,28 +101,49 @@ public class DetailActivity extends AppCompatActivity {
             finish();
         }
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
-        movie = viewModel.getMovieById(id);
-        Picasso.get().load(movie.getBigPosterPath()).placeholder(R.drawable.placeholder).into(imageViewBigPoster);
-        textViewTitle.setText(movie.getTitle());
-        textViewOriginalTitle.setText(movie.getOriginalTitle());
-        textViewOverview.setText(movie.getOverview());
-        textViewReleaseDate.setText(movie.getReleaseDate());
-        textViewRating.setText(Double.toString(movie.getVoteAverage()));
-        setFavourite();
+        try {
+            movie = viewModel.getMovieById(id);
+            Picasso.get().load(movie.getBigPosterPath()).placeholder(R.drawable.placeholder).into(imageViewBigPoster);
+            textViewTitle.setText(movie.getTitle());
+            textViewOriginalTitle.setText(movie.getOriginalTitle());
+            textViewOverview.setText(movie.getOverview());
+            textViewReleaseDate.setText(movie.getReleaseDate());
+            textViewRating.setText(Double.toString(movie.getVoteAverage()));
+            setFavourite();
 
-        Intent intent1 = getIntent();
-        if (intent1 != null && intent1.hasExtra("idF")) {
-            idF = intent1.getIntExtra("idF", -1);
-        } else {
-            finish();
+            Intent intent1 = getIntent();
+            if (intent1 != null && intent1.hasExtra("idF")) {
+                idF = intent1.getIntExtra("idF", -1);
+            } else {
+                finish();
+            }
+            favouriteMovie = viewModel.getFavouriteMovieById(idF);
+            Picasso.get().load(favouriteMovie.getBigPosterPath()).placeholder(R.drawable.placeholder).into(imageViewBigPoster);
+            textViewTitle.setText(favouriteMovie.getTitle());
+            textViewOriginalTitle.setText(favouriteMovie.getOriginalTitle());
+            textViewOverview.setText(favouriteMovie.getOverview());
+            textViewReleaseDate.setText(favouriteMovie.getReleaseDate());
+            textViewRating.setText(Double.toString(favouriteMovie.getVoteAverage()));
+            setFavourite();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        favouriteMovie = viewModel.getFavouriteMovieById(idF);
-        Picasso.get().load(favouriteMovie.getBigPosterPath()).placeholder(R.drawable.placeholder).into(imageViewBigPoster);
-        textViewTitle.setText(favouriteMovie.getTitle());
-        textViewOriginalTitle.setText(favouriteMovie.getOriginalTitle());
-        textViewOverview.setText(favouriteMovie.getOverview());
-        textViewReleaseDate.setText(favouriteMovie.getReleaseDate());
-        textViewRating.setText(Double.toString(favouriteMovie.getVoteAverage()));
+
+        if (favouriteMovie == null) {
+            Picasso.get().load(movie.getBigPosterPath()).placeholder(R.drawable.placeholder).into(imageViewBigPoster);
+            textViewTitle.setText(movie.getTitle());
+            textViewOriginalTitle.setText(movie.getOriginalTitle());
+            textViewOverview.setText(movie.getOverview());
+            textViewReleaseDate.setText(movie.getReleaseDate());
+            textViewRating.setText(Double.toString(movie.getVoteAverage()));
+        } else {
+            Picasso.get().load(favouriteMovie.getBigPosterPath()).placeholder(R.drawable.placeholder).into(imageViewBigPoster);
+            textViewTitle.setText(favouriteMovie.getTitle());
+            textViewOriginalTitle.setText(favouriteMovie.getOriginalTitle());
+            textViewOverview.setText(favouriteMovie.getOverview());
+            textViewReleaseDate.setText(favouriteMovie.getReleaseDate());
+            textViewRating.setText(Double.toString(favouriteMovie.getVoteAverage()));
+        }
         setFavourite();
 
 
