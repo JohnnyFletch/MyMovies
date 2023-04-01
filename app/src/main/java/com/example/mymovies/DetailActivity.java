@@ -51,6 +51,7 @@ public class DetailActivity extends AppCompatActivity {
     private TrailerAdapter trailerAdapter;
 
     private int id;
+    private int idF;
     private Movie movie;
     private FavouriteMovie favouriteMovie;
     private MainViewModel viewModel;
@@ -108,6 +109,23 @@ public class DetailActivity extends AppCompatActivity {
         textViewReleaseDate.setText(movie.getReleaseDate());
         textViewRating.setText(Double.toString(movie.getVoteAverage()));
         setFavourite();
+
+        Intent intent1 = getIntent();
+        if (intent1 != null && intent1.hasExtra("idF")) {
+            idF = intent1.getIntExtra("idF", -1);
+        } else {
+            finish();
+        }
+        favouriteMovie = viewModel.getFavouriteMovieById(idF);
+        Picasso.get().load(favouriteMovie.getBigPosterPath()).placeholder(R.drawable.placeholder).into(imageViewBigPoster);
+        textViewTitle.setText(favouriteMovie.getTitle());
+        textViewOriginalTitle.setText(favouriteMovie.getOriginalTitle());
+        textViewOverview.setText(favouriteMovie.getOverview());
+        textViewReleaseDate.setText(favouriteMovie.getReleaseDate());
+        textViewRating.setText(Double.toString(favouriteMovie.getVoteAverage()));
+        setFavourite();
+
+
         recyclerViewTrailers = findViewById(R.id.recyclerViewTrailers);
         recyclerViewReviews = findViewById(R.id.recyclerViewReviews);
         reviewAdapter = new ReviewAdapter();
