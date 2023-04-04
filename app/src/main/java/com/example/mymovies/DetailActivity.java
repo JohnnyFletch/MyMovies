@@ -130,6 +130,7 @@ public class DetailActivity extends AppCompatActivity {
             textViewRating.setText(Double.toString(favouriteMovie.getVoteAverage()));
             movieId = favouriteMovie.getId();
         }
+        setFavourite();
 
 
         recyclerViewTrailers = findViewById(R.id.recyclerViewTrailers);
