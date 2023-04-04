@@ -97,13 +97,14 @@ public class DetailActivity extends AppCompatActivity {
         imageViewAddToFavourite = findViewById(R.id.imageViewAddToFavourite);
         scrollViewInfo = findViewById(R.id.scrollViewInfo);
         Intent intent = getIntent();
-        if (intent != null && intent.hasExtra("id")) {
-            id = intent.getIntExtra("id",-1);
-        } else {
-            finish();
-        }
-        if (intent != null && intent.hasExtra("idF")) {
-            idF = intent.getIntExtra("idF",-1);
+        if (intent != null) {
+            if (intent.hasExtra("id")) {
+                id = intent.getIntExtra("id",-1);
+            }
+            else if (intent.hasExtra("idF")) {
+                idF = intent.getIntExtra("idF",-1);
+            }
+            else finish();
         } else {
             finish();
         }
@@ -169,7 +170,7 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void setFavourite() {
-        favouriteMovie = viewModel.getFavouriteMovieById(id);
+        favouriteMovie = viewModel.getFavouriteMovieById(movieId);
         if (favouriteMovie == null) {
             imageViewAddToFavourite.setImageResource(R.drawable.grays);
         } else {
