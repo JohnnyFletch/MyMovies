@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -52,6 +53,7 @@ public class DetailActivity extends AppCompatActivity {
 
     private int id;
     private int idF;
+    private int movieId;
     private Movie movie;
     private FavouriteMovie favouriteMovie;
     private MainViewModel viewModel;
@@ -100,51 +102,33 @@ public class DetailActivity extends AppCompatActivity {
         } else {
             finish();
         }
-        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
-        try {
-            movie = viewModel.getMovieById(id);
-            Picasso.get().load(movie.getBigPosterPath()).placeholder(R.drawable.placeholder).into(imageViewBigPoster);
-            textViewTitle.setText(movie.getTitle());
-            textViewOriginalTitle.setText(movie.getOriginalTitle());
-            textViewOverview.setText(movie.getOverview());
-            textViewReleaseDate.setText(movie.getReleaseDate());
-            textViewRating.setText(Double.toString(movie.getVoteAverage()));
-            setFavourite();
-
-            Intent intent1 = getIntent();
-            if (intent1 != null && intent1.hasExtra("idF")) {
-                idF = intent1.getIntExtra("idF", -1);
-            } else {
-                finish();
-            }
-            favouriteMovie = viewModel.getFavouriteMovieById(idF);
-            Picasso.get().load(favouriteMovie.getBigPosterPath()).placeholder(R.drawable.placeholder).into(imageViewBigPoster);
-            textViewTitle.setText(favouriteMovie.getTitle());
-            textViewOriginalTitle.setText(favouriteMovie.getOriginalTitle());
-            textViewOverview.setText(favouriteMovie.getOverview());
-            textViewReleaseDate.setText(favouriteMovie.getReleaseDate());
-            textViewRating.setText(Double.toString(favouriteMovie.getVoteAverage()));
-            setFavourite();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        if (favouriteMovie == null) {
-            Picasso.get().load(movie.getBigPosterPath()).placeholder(R.drawable.placeholder).into(imageViewBigPoster);
-            textViewTitle.setText(movie.getTitle());
-            textViewOriginalTitle.setText(movie.getOriginalTitle());
-            textViewOverview.setText(movie.getOverview());
-            textViewReleaseDate.setText(movie.getReleaseDate());
-            textViewRating.setText(Double.toString(movie.getVoteAverage()));
+        if (intent != null && intent.hasExtra("idF")) {
+            idF = intent.getIntExtra("idF",-1);
         } else {
-            Picasso.get().load(favouriteMovie.getBigPosterPath()).placeholder(R.drawable.placeholder).into(imageViewBigPoster);
-            textViewTitle.setText(favouriteMovie.getTitle());
-            textViewOriginalTitle.setText(favouriteMovie.getOriginalTitle());
-            textViewOverview.setText(favouriteMovie.getOverview());
-            textViewReleaseDate.setText(favouriteMovie.getReleaseDate());
-            textViewRating.setText(Double.toString(favouriteMovie.getVoteAverage()));
+            finish();
+        }
+        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        movie = viewModel.getMovieById(id);
+        if (movie != null) {
+            Picasso.get().load(movie.getBigPosterPath()).placeholder(R.drawable.placeholder).into(imageViewBigPoster);
+            textViewTitle.setText(movie.getTitle());
+            textViewOriginalTitle.setText(movie.getOriginalTitle());
+            textViewOverview.setText(movie.getOverview());
+            textViewReleaseDate.setText(movie.getReleaseDate());
+            textViewRating.setText(Double.toString(movie.getVoteAverage()));
+            movieId = movie.getId();
         }
         setFavourite();
+        favouriteMovie = viewModel.getFavouriteMovieById(idF);
+        if (favouriteMovie != null) {
+            Picasso.get().load(favouriteMovie.getBigPosterPath()).placeholder(R.drawable.placeholder).into(imageViewBigPoster);
+            textViewTitle.setText(favouriteMovie.getTitle());
+            textViewOriginalTitle.setText(favouriteMovie.getOriginalTitle());
+            textViewOverview.setText(favouriteMovie.getOverview());
+            textViewReleaseDate.setText(favouriteMovie.getReleaseDate());
+            textViewRating.setText(Double.toString(favouriteMovie.getVoteAverage()));
+            movieId = favouriteMovie.getId();
+        }
 
 
         recyclerViewTrailers = findViewById(R.id.recyclerViewTrailers);
@@ -162,8 +146,10 @@ public class DetailActivity extends AppCompatActivity {
         recyclerViewTrailers.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewTrailers.setAdapter(trailerAdapter);
         recyclerViewReviews.setAdapter(reviewAdapter);
-        JSONObject jsonObjectTrailers = NetworkUtils.getJSONForVideos(movie.getId(),lang);
-        JSONObject jsonObjectReviews = NetworkUtils.getJSONForReviews(movie.getId(),lang);
+        Log.e("movieId",String.valueOf(movieId));
+
+        JSONObject jsonObjectTrailers = NetworkUtils.getJSONForVideos(movieId,lang);
+        JSONObject jsonObjectReviews = NetworkUtils.getJSONForReviews(movieId,lang);
         ArrayList<Trailer> trailers = JSONUtils.getTrailersFromJSON(jsonObjectTrailers);
         ArrayList<Review> reviews = JSONUtils.getReviewsFromJSON(jsonObjectReviews);
         reviewAdapter.setReviews(reviews);
